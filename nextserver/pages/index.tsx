@@ -25,7 +25,7 @@ export default function Home() {
         onChange={(e) => setEndDate(e.target.value)}
       /> <br /><br />
 </form>
-<Link href={`/booking?startDate=${startDate}&endDate=${endDate}&email=${email}`}>Send Invitation</Link>
+<Link className='fcc-btn' href={`/booking?startDate=${startDate}&endDate=${endDate}&email=${email}`}>Send Invitation</Link>
     </div>
   )
 }

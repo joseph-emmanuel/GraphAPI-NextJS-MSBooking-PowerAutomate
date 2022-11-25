@@ -10,12 +10,12 @@ export default async function handler(req, res) {
   //     "YYYY-MM-DDTHH:mm:ss"
   //   )
   // );
-  // console.log("Date: ", req.body.EndTime);
+  console.log("Date: ", req.body.StartTime);
   await axios.post(`http://localhost:1337/api/bookings`, {
     data: {
       CustomerName: req.body.CustomerName,
       CustomerEmail: req.body.CustomerEmail,
-      BookingDate: moment(req.body.EndTime, "MM/DD/YYYY HH:mm:ss A").format(
+      BookingDate: moment(req.body.StartTime, "MM/DD/YYYY HH:mm:ss A").format(
         "YYYY-MM-DDTHH:mm:ss"
       ),
       AppointmentId: req.body.Id,

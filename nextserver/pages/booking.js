@@ -71,7 +71,7 @@ function arrayCreator(slots) {
   slots = slots.map((item) =>
     moment(item, "hh:mmA").add(6, "hours").format("hh:mmA")
   );
-  console.log("slots", slots);
+  //   console.log("slots", slots);
 
   console.log("slots", slots);
   const locale = "en";
