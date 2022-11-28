@@ -8,11 +8,20 @@ import { use, useEffect, useState } from "react";
 import Router, { useRouter } from "next/router";
 // import getBookedSlots from "../public/getSlots";
 
-function Booking({ slots, email, startDate, endDate }) {
+function Booking({ slots, email, startDate, endDate, staffMembersArray }) {
   const [name, setName] = useState("");
   const [selectedOption, setSelectedOption] = useState("");
+  const [selectedStaff, setSelectedStaff] = useState("");
   const router = useRouter();
-  //   console.log("slots", slots);
+  const staffArray = [];
+  console.log("data", slots.value);
+  slots.value.map((item) => {
+    staffArray.includes(item.staffMemberIds[0]) ||
+    item.staffMemberIds[0] !== undefined
+      ? staffArray.push(item.staffMemberIds[0])
+      : null;
+  });
+  // console.log("Staff memberArray", staffMembersArray.value.displayName);
   const bookedSlots = slots.value.map((item) =>
     moment(item.start.dateTime, "YYYY-MM-DDTHH:mm").format("hh:mmA")
   );
@@ -46,6 +55,26 @@ function Booking({ slots, email, startDate, endDate }) {
           <select
             name=""
             id=""
+            onChange={(e) => setSelectedStaff(e.target.value)}
+          >
+            {[...new Set(staffArray)].map((item) => (
+              <option value={item}>{item}</option>
+            ))}
+          </select>{" "}
+          <br />
+          <select
+            name=""
+            id=""
+            onChange={(e) => setSelectedStaff(e.target.value)}
+          >
+            {staffMembersArray.value.map((item) => (
+              <option value={item.displayName}>{item.displayName}</option>
+            ))}
+          </select>{" "}
+          <br />
+          <select
+            name=""
+            id=""
             onChange={(e) => setSelectedOption(e.target.value)}
           >
             {totalSlots.map((item) => (
@@ -73,7 +102,7 @@ function arrayCreator(slots) {
   );
   //   console.log("slots", slots);
 
-  console.log("slots", slots);
+  // console.log("slots", slots);
   const locale = "en";
   const hours = [];
   moment.locale(locale);
@@ -109,8 +138,19 @@ Booking.getInitialProps = async (ctx) => {
   const dmy = `https://catfact.ninja/fact`;
   const res = await fetch(org, config);
   const json = await res.json();
-  //   console.log("json", json);
-  return { slots: json, email: email, startDate: startDate, endDate: endDate };
+  const staffMembers = await fetch(
+    `https://graph.microsoft.com/beta/bookingBusinesses/bookingBusiness@sashat.onmicrosoft.com/staffMembers`,
+    config
+  );
+  const staffMembersArray = await staffMembers.json();
+  console.log("json", json);
+  return {
+    slots: json,
+    email: email,
+    startDate: startDate,
+    endDate: endDate,
+    staffMembersArray: staffMembersArray,
+  };
 };
 function submitContact(startDate, endDate, email, name, selectedOption) {
   startDate = moment(

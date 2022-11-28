@@ -30,6 +30,7 @@ function getData(date1, date2, email, name) {
       dateTime: `${date2}`,
       timeZone: "America/Chicago",
     },
+    staffMemberIds: ["0f7419af-1444-45ac-a78d-745c23bb4c10"],
     customers: [
       {
         "@odata.type": "#microsoft.graph.bookingCustomerInformation",
