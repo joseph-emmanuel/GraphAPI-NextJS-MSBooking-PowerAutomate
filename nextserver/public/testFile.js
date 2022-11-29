@@ -1,7 +1,7 @@
 // import React from "react";
 import axios from "axios";
 import moment from "moment";
-function getData(date1, date2, email, name) {
+function getData(date1, date2, email, name, selectedStaff) {
   const stratDate = moment(date1, "YYYY-MM-DDTHH:mm").format(
     "YYYY-MM-DDTHH:mm:ss.0000000+00:00"
   );
@@ -30,7 +30,7 @@ function getData(date1, date2, email, name) {
       dateTime: `${date2}`,
       timeZone: "America/Chicago",
     },
-    staffMemberIds: ["0f7419af-1444-45ac-a78d-745c23bb4c10"],
+    staffMemberIds: [`${selectedStaff}`],
     customers: [
       {
         "@odata.type": "#microsoft.graph.bookingCustomerInformation",
@@ -81,6 +81,7 @@ function getData(date1, date2, email, name) {
       },
     ],
   };
+  // console.log("Selected staff", selectedStaff);
   // console.log("stratDate:", date1);
   // console.log("endDate:", date2);
   // console.log("email:", email);

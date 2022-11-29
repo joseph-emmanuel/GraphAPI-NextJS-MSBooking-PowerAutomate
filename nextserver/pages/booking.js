@@ -14,18 +14,20 @@ function Booking({ slots, email, startDate, endDate, staffMembersArray }) {
   const [selectedStaff, setSelectedStaff] = useState("");
   const router = useRouter();
   const staffArray = [];
-  console.log("data", slots.value);
+  // console.log("Selected Staff", selectedStaff);
   slots.value.map((item) => {
     staffArray.includes(item.staffMemberIds[0]) ||
     item.staffMemberIds[0] !== undefined
       ? staffArray.push(item.staffMemberIds[0])
       : null;
   });
-  // console.log("Staff memberArray", staffMembersArray.value.displayName);
+  // staffMembersArray.value.map((item) => {
+  //   console.log("Staff members :", item);
+  // });
   const bookedSlots = slots.value.map((item) =>
     moment(item.start.dateTime, "YYYY-MM-DDTHH:mm").format("hh:mmA")
   );
-  const totalSlots = arrayCreator(bookedSlots);
+  const totalSlots = arrayCreator(bookedSlots, staffMembersArray.value.length);
   //   console.log("totalSlots", totalSlots);
 
   return (
@@ -52,7 +54,7 @@ function Booking({ slots, email, startDate, endDate, staffMembersArray }) {
             onChange={({ target }) => setName(target?.value)}
           />
           <br />
-          <select
+          {/* <select
             name=""
             id=""
             onChange={(e) => setSelectedStaff(e.target.value)}
@@ -60,18 +62,19 @@ function Booking({ slots, email, startDate, endDate, staffMembersArray }) {
             {[...new Set(staffArray)].map((item) => (
               <option value={item}>{item}</option>
             ))}
-          </select>{" "}
+          </select>{" "} */}
           <br />
-          <select
+          {/* <select
             name=""
             id=""
             onChange={(e) => setSelectedStaff(e.target.value)}
           >
             {staffMembersArray.value.map((item) => (
-              <option value={item.displayName}>{item.displayName}</option>
+              <option value={item.id}>{item.displayName}</option>
             ))}
           </select>{" "}
           <br />
+          <br /> */}
           <select
             name=""
             id=""
@@ -81,11 +84,19 @@ function Booking({ slots, email, startDate, endDate, staffMembersArray }) {
               <option value={item}>{item}</option>
             ))}
           </select>
+          <br />
         </form>{" "}
         <br /> <br />
         <button
           onClick={() =>
-            submitContact(startDate, endDate, email, name, selectedOption)
+            submitContact(
+              startDate,
+              endDate,
+              email,
+              name,
+              selectedOption,
+              selectedStaff
+            )
           }
         >
           Submit data
@@ -95,25 +106,27 @@ function Booking({ slots, email, startDate, endDate, staffMembersArray }) {
   );
 }
 export default Booking;
-function arrayCreator(slots) {
+function arrayCreator(slots, staffNumber) {
   //   slots = moment(slots).add(6, "hours").format("hh:mmA");
   slots = slots.map((item) =>
     moment(item, "hh:mmA").add(6, "hours").format("hh:mmA")
   );
-  //   console.log("slots", slots);
+  console.log("staffNumber", staffNumber);
 
   // console.log("slots", slots);
   const locale = "en";
   const hours = [];
   moment.locale(locale);
   for (let hour = 9; hour < 18; hour++) {
-    hours.push(moment({ hour }).format("hh:mmA"));
-    hours.push(
-      moment({
-        hour,
-        minute: 30,
-      }).format("hh:mmA")
-    );
+    for (let min = 0; min < staffNumber; min++) {
+      hours.push(moment({ hour }).format("hh:mmA"));
+      hours.push(
+        moment({
+          hour,
+          minute: 30,
+        }).format("hh:mmA")
+      );
+    }
   }
   return hours.filter((item) => !slots.includes(item));
 }
@@ -152,7 +165,14 @@ Booking.getInitialProps = async (ctx) => {
     staffMembersArray: staffMembersArray,
   };
 };
-function submitContact(startDate, endDate, email, name, selectedOption) {
+function submitContact(
+  startDate,
+  endDate,
+  email,
+  name,
+  selectedOption,
+  selectedStaff
+) {
   startDate = moment(
     moment(startDate, "YYYY-MM-DDTHH:mm:ss:00.0000000+00:00").format(
       "YYYY-MM-DDT"
@@ -161,5 +181,12 @@ function submitContact(startDate, endDate, email, name, selectedOption) {
   ).format("YYYY-MM-DDTHH:mm");
   endDate = moment(startDate).add(30, "minutes").format("YYYY-MM-DDTHH:mm");
 
-  getData(moment(startDate).format("YYYY-MM-DDTHH:mm"), endDate, email, name);
+  // console.log("selectedStaff from booking:", selectedStaff);
+  getData(
+    moment(startDate).format("YYYY-MM-DDTHH:mm"),
+    endDate,
+    email,
+    name,
+    selectedStaff
+  );
 }
