@@ -27,7 +27,7 @@ function Booking({ slots, email, startDate, endDate, staffMembersArray }) {
   const bookedSlots = slots.value.map((item) =>
     moment(item.start.dateTime, "YYYY-MM-DDTHH:mm").format("hh:mmA")
   );
-  const totalSlots = arrayCreator(bookedSlots, staffMembersArray.value.length);
+  const totalSlots = arrayCreator(bookedSlots, staffMembersArray.value);
   //   console.log("totalSlots", totalSlots);
 
   return (
@@ -118,13 +118,15 @@ function arrayCreator(slots, staffNumber) {
   const hours = [];
   moment.locale(locale);
   for (let hour = 9; hour < 18; hour++) {
-    for (let min = 0; min < staffNumber; min++) {
-      hours.push(moment({ hour }).format("hh:mmA"));
+    for (let min = 0; min < staffNumber.length; min++) {
+      hours.push(
+        moment({ hour }).format("hh:mmA") + staffNumber[min].displayName
+      );
       hours.push(
         moment({
           hour,
           minute: 30,
-        }).format("hh:mmA")
+        }).format("hh:mmA") + staffNumber[min].displayName
       );
     }
   }
