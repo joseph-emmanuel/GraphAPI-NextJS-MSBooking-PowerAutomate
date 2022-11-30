@@ -86,19 +86,20 @@ function getData(date1, date2, email, name, selectedStaff) {
   // console.log("endDate:", date2);
   // console.log("email:", email);
   // console.log("name:", name);
-  axios
-    .post(
-      "https://graph.microsoft.com/beta/bookingBusinesses/bookingBusiness@sashat.onmicrosoft.com/appointments",
-      bodyParameters,
-      config
-    )
-    .then((response) => {
-      response;
-      alert("Appointment created successfully");
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+  // console.log("StaffMember ID:", selectedStaff);
+  // axios
+  //   .post(
+  //     "https://graph.microsoft.com/beta/bookingBusinesses/bookingBusiness@sashat.onmicrosoft.com/appointments",
+  //     bodyParameters,
+  //     config
+  //   )
+  //   .then((response) => {
+  //     response;
+  //     alert("Appointment created successfully");
+  //   })
+  //   .catch((error) => {
+  //     console.log(error);
+  //   });
 }
 // function addHours(numOfHours, date = new Date()) {
 //   const dateCopy = new Date(date.getTime());

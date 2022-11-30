@@ -27,7 +27,7 @@ function Booking({ slots, email, startDate, endDate, staffMembersArray }) {
   const bookedSlots = slots.value.map((item) =>
     moment(item.start.dateTime, "YYYY-MM-DDTHH:mm").format("hh:mmA")
   );
-  const totalSlots = arrayCreator(bookedSlots, staffMembersArray.value);
+  const totalSlots = arrayCreator(bookedSlots, staffMembersArray.value, slots);
   //   console.log("totalSlots", totalSlots);
 
   return (
@@ -81,7 +81,7 @@ function Booking({ slots, email, startDate, endDate, staffMembersArray }) {
             onChange={(e) => setSelectedOption(e.target.value)}
           >
             {totalSlots.map((item) => (
-              <option value={item}>{item}</option>
+              <option value={item}>{item.substring(0, 7)}</option>
             ))}
           </select>
           <br />
@@ -95,7 +95,7 @@ function Booking({ slots, email, startDate, endDate, staffMembersArray }) {
               email,
               name,
               selectedOption,
-              selectedStaff
+              selectedOption.substring(7)
             )
           }
         >
@@ -106,31 +106,44 @@ function Booking({ slots, email, startDate, endDate, staffMembersArray }) {
   );
 }
 export default Booking;
-function arrayCreator(slots, staffNumber) {
+function arrayCreator(slots, staffNumber, slotsArray) {
   //   slots = moment(slots).add(6, "hours").format("hh:mmA");
-  slots = slots.map((item) =>
-    moment(item, "hh:mmA").add(6, "hours").format("hh:mmA")
-  );
-  console.log("staffNumber", staffNumber);
+  const staffArray = [];
+  console.log();
 
-  // console.log("slots", slots);
+  slotsArray.value.map((item) => {
+    staffArray.push(
+      moment(item.start.dateTime, "YYYY-MM-DDTHH:mm")
+        .add(6, "hours")
+        .format("hh:mmA") + item.staffMemberIds[0]
+    );
+  });
+
+  slotsArray.value.map((item) => {
+    console.log(
+      "item:",
+      moment(item.start.dateTime, "YYYY-MM-DDTHH:mm")
+        .add(6, "hours")
+        .format("hh:mmA") + item.staffMemberIds[0]
+    );
+  });
+
+  console.log("slots", staffArray);
   const locale = "en";
   const hours = [];
   moment.locale(locale);
   for (let hour = 9; hour < 18; hour++) {
     for (let min = 0; min < staffNumber.length; min++) {
-      hours.push(
-        moment({ hour }).format("hh:mmA") + staffNumber[min].displayName
-      );
+      hours.push(moment({ hour }).format("hh:mmA") + staffNumber[min].id);
       hours.push(
         moment({
           hour,
           minute: 30,
-        }).format("hh:mmA") + staffNumber[min].displayName
+        }).format("hh:mmA") + staffNumber[min].id
       );
     }
   }
-  return hours.filter((item) => !slots.includes(item));
+  return hours.filter((item) => !staffArray.includes(item));
 }
 Booking.getInitialProps = async (ctx) => {
   const startDate = ctx.query.startDate + ":00Z";
@@ -183,7 +196,7 @@ function submitContact(
   ).format("YYYY-MM-DDTHH:mm");
   endDate = moment(startDate).add(30, "minutes").format("YYYY-MM-DDTHH:mm");
 
-  // console.log("selectedStaff from booking:", selectedStaff);
+  // console.log("booked slots:", selectedStaff);
   getData(
     moment(startDate).format("YYYY-MM-DDTHH:mm"),
     endDate,
