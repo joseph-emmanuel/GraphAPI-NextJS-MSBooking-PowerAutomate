@@ -26,6 +26,11 @@ export default function Home() {
       /> <br /><br />
 </form>
 <Link className='fcc-btn' href={`/booking?startDate=${startDate}&endDate=${endDate}&email=${email}`}>Send Invitation</Link>
+<div className='toDelete'>
+
+
+
+</div>
     </div>
   )
 }
