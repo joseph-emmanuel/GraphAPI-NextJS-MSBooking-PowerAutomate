@@ -14,6 +14,10 @@ function Booking({ slots, email, startDate, endDate, staffMembersArray }) {
   const [selectedStaff, setSelectedStaff] = useState("");
   const router = useRouter();
   const staffArray = [];
+  const multiArray = [];
+  const filterdArray = [];
+  const filterdArray2 = [];
+
   // console.log("Selected Staff", selectedStaff);
   slots.value.map((item) => {
     staffArray.includes(item.staffMemberIds[0]) ||
@@ -28,8 +32,23 @@ function Booking({ slots, email, startDate, endDate, staffMembersArray }) {
     moment(item.start.dateTime, "YYYY-MM-DDTHH:mm").format("hh:mmA")
   );
   const totalSlots = arrayCreator(bookedSlots, staffMembersArray.value, slots);
-  //   console.log("totalSlots", totalSlots);
-
+  totalSlots.map((item) => {
+    multiArray.push([item.substring(0, 7), item]);
+  });
+  // console.log("multiArray", multiArray);
+  multiArray.map((item) => {
+    filterdArray.includes(item[0])
+      ? null
+      : filterdArray.push(item[0], filterdArray2.push(item[1]));
+    // filterdArray.map((i) => {
+    //   i === item[0] ? null : filterdArray.push(item[0]);
+    // });
+  });
+  console.log(
+    "Unique array from :",
+    filterdArray2
+    // multiArray.filter((item, index) => multiArray.indexOf(item) === index)
+  );
   return (
     <div>
       <h1 className="text-center mt-24"> Form </h1>
@@ -51,6 +70,8 @@ function Booking({ slots, email, startDate, endDate, staffMembersArray }) {
           <input
             className="!w-[200px]"
             type="text"
+            id="fname"
+            name="fname"
             onChange={({ target }) => setName(target?.value)}
           />
           <br />
@@ -80,8 +101,11 @@ function Booking({ slots, email, startDate, endDate, staffMembersArray }) {
             id=""
             onChange={(e) => setSelectedOption(e.target.value)}
           >
-            {totalSlots.map((item) => (
+            {/* {totalSlots.sort().map((item) => (
               <option value={item}>{item.substring(0, 7)}</option>
+            ))} */}
+            {filterdArray2.map((item) => (
+              <option value={item}>{item.slice(0, 7)}</option>
             ))}
           </select>
           <br />
