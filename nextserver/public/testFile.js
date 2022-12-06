@@ -1,4 +1,3 @@
-// import React from "react";
 import axios from "axios";
 import moment from "moment";
 function getData(date1, date2, email, name, selectedStaff) {
@@ -19,7 +18,6 @@ function getData(date1, date2, email, name, selectedStaff) {
     customerEmailAddress: `${email}`,
     serviceId: "8845d8f1-7ca1-409e-a985-d143a29ffd05",
     serviceName: "Addition of tasks",
-    // staffMemberIds: ["joedev@sashat.onmicrosoft.com"],
     start: {
       "@odata.type": "#microsoft.graph.dateTimeTimeZone",
       dateTime: `${date1}`,
@@ -81,12 +79,7 @@ function getData(date1, date2, email, name, selectedStaff) {
       },
     ],
   };
-  // console.log("Selected staff", selectedStaff);
-  // console.log("stratDate:", date1);
-  // console.log("endDate:", date2);
-  // console.log("email:", email);
-  // console.log("name:", name);
-  // console.log("StaffMember ID:", selectedStaff);
+
   axios
     .post(
       "https://graph.microsoft.com/beta/bookingBusinesses/bookingBusiness@sashat.onmicrosoft.com/appointments",
@@ -101,11 +94,5 @@ function getData(date1, date2, email, name, selectedStaff) {
       console.log(error);
     });
 }
-// function addHours(numOfHours, date = new Date()) {
-//   const dateCopy = new Date(date.getTime());
 
-//   dateCopy.setTime(dateCopy.getTime() + numOfHours * 60 * 60 * 1000);
-
-//   return dateCopy;
-// }
 export default getData;

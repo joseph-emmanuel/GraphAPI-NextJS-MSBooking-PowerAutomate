@@ -6,7 +6,6 @@ import getData from "../public/testFile";
 import Script from "next/script";
 import { use, useEffect, useState } from "react";
 import Router, { useRouter } from "next/router";
-// import getBookedSlots from "../public/getSlots";
 
 function Booking({ slots, email, startDate, endDate, staffMembersArray }) {
   const [name, setName] = useState("");
@@ -18,16 +17,13 @@ function Booking({ slots, email, startDate, endDate, staffMembersArray }) {
   const filterdArray = [];
   const filterdArray2 = [];
 
-  // console.log("Selected Staff", selectedStaff);
   slots.value.map((item) => {
     staffArray.includes(item.staffMemberIds[0]) ||
     item.staffMemberIds[0] !== undefined
       ? staffArray.push(item.staffMemberIds[0])
       : null;
   });
-  // staffMembersArray.value.map((item) => {
-  //   console.log("Staff members :", item);
-  // });
+
   const bookedSlots = slots.value.map((item) =>
     moment(item.start.dateTime, "YYYY-MM-DDTHH:mm").format("hh:mmA")
   );
@@ -35,24 +31,16 @@ function Booking({ slots, email, startDate, endDate, staffMembersArray }) {
   totalSlots.map((item) => {
     multiArray.push([item.substring(0, 7), item]);
   });
-  // console.log("multiArray", multiArray);
+
   multiArray.map((item) => {
     filterdArray.includes(item[0])
       ? null
       : filterdArray.push(item[0], filterdArray2.push(item[1]));
-    // filterdArray.map((i) => {
-    //   i === item[0] ? null : filterdArray.push(item[0]);
-    // });
   });
-  console.log(
-    "Unique array from :",
-    filterdArray2
-    // multiArray.filter((item, index) => multiArray.indexOf(item) === index)
-  );
+
   return (
     <div>
       <h1 className="text-center mt-24"> Form </h1>
-      {/* <button onClick={submitContact}>Click for Data</button> */}
       <div className="m-auto">
         <form action="" onSubmit={submitContact} className="m-auto">
           <label htmlFor="email">Email</label>
@@ -75,35 +63,12 @@ function Booking({ slots, email, startDate, endDate, staffMembersArray }) {
             onChange={({ target }) => setName(target?.value)}
           />
           <br />
-          {/* <select
-            name=""
-            id=""
-            onChange={(e) => setSelectedStaff(e.target.value)}
-          >
-            {[...new Set(staffArray)].map((item) => (
-              <option value={item}>{item}</option>
-            ))}
-          </select>{" "} */}
           <br />
-          {/* <select
-            name=""
-            id=""
-            onChange={(e) => setSelectedStaff(e.target.value)}
-          >
-            {staffMembersArray.value.map((item) => (
-              <option value={item.id}>{item.displayName}</option>
-            ))}
-          </select>{" "}
-          <br />
-          <br /> */}
           <select
             name=""
             id=""
             onChange={(e) => setSelectedOption(e.target.value)}
           >
-            {/* {totalSlots.sort().map((item) => (
-              <option value={item}>{item.substring(0, 7)}</option>
-            ))} */}
             {filterdArray2.map((item) => (
               <option value={item}>{item.slice(0, 7)}</option>
             ))}
@@ -131,9 +96,7 @@ function Booking({ slots, email, startDate, endDate, staffMembersArray }) {
 }
 export default Booking;
 function arrayCreator(slots, staffNumber, slotsArray) {
-  //   slots = moment(slots).add(6, "hours").format("hh:mmA");
   const staffArray = [];
-  console.log();
 
   slotsArray.value.map((item) => {
     staffArray.push(
@@ -152,7 +115,6 @@ function arrayCreator(slots, staffNumber, slotsArray) {
     );
   });
 
-  console.log("slots", staffArray);
   const locale = "en";
   const hours = [];
   moment.locale(locale);
@@ -173,12 +135,6 @@ Booking.getInitialProps = async (ctx) => {
   const startDate = ctx.query.startDate + ":00Z";
   const endDate = ctx.query.endDate + ":00Z";
   const email = ctx.query.email;
-  //   console.log("startDate", startDate);
-  //   console.log("endDate", endDate);
-  //   console.log("email", email);
-  //   console.log(
-  //     `Query string: https://graph.microsoft.com/beta/bookingBusinesses/bookingBusiness@sashat.onmicrosoft.com/calendarView?start=${startDate}&end=${endDate}`
-  //   );
 
   const config = {
     headers: {
@@ -195,7 +151,6 @@ Booking.getInitialProps = async (ctx) => {
     config
   );
   const staffMembersArray = await staffMembers.json();
-  console.log("json", json);
   return {
     slots: json,
     email: email,
@@ -220,7 +175,6 @@ function submitContact(
   ).format("YYYY-MM-DDTHH:mm");
   endDate = moment(startDate).add(30, "minutes").format("YYYY-MM-DDTHH:mm");
 
-  // console.log("booked slots:", selectedStaff);
   getData(
     moment(startDate).format("YYYY-MM-DDTHH:mm"),
     endDate,
