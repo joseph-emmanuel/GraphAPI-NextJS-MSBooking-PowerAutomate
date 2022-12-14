@@ -1,6 +1,6 @@
 import axios from "axios";
 import moment from "moment";
-function getData(date1, date2, email, name, selectedStaff) {
+function getData(date1, date2, email, name, selectedStaff, accessToken) {
   const stratDate = moment(date1, "YYYY-MM-DDTHH:mm").format(
     "YYYY-MM-DDTHH:mm:ss.0000000+00:00"
   );
@@ -10,7 +10,7 @@ function getData(date1, date2, email, name, selectedStaff) {
 
   const config = {
     headers: {
-      Authorization: `Bearer ${process.env.NEXT_PUBLIC_ACCES_TOKEN}`,
+      Authorization: `Bearer ${accessToken}`,
       "Content-Type": "application/json",
     },
   };

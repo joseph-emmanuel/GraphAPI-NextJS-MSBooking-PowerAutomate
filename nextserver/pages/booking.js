@@ -7,7 +7,14 @@ import Script from "next/script";
 import { use, useEffect, useState } from "react";
 import Router, { useRouter } from "next/router";
 
-function Booking({ slots, email, startDate, endDate, staffMembersArray }) {
+function Booking({
+  slots,
+  email,
+  startDate,
+  endDate,
+  staffMembersArray,
+  accessToken,
+}) {
   const [name, setName] = useState("");
   const [selectedOption, setSelectedOption] = useState("");
   const [selectedStaff, setSelectedStaff] = useState("");
@@ -84,7 +91,8 @@ function Booking({ slots, email, startDate, endDate, staffMembersArray }) {
               email,
               name,
               selectedOption,
-              selectedOption.substring(7)
+              selectedOption.substring(7),
+              accessToken
             )
           }
         >
@@ -106,14 +114,14 @@ function arrayCreator(slots, staffNumber, slotsArray) {
     );
   });
 
-  slotsArray.value.map((item) => {
-    console.log(
-      "item:",
-      moment(item.start.dateTime, "YYYY-MM-DDTHH:mm")
-        .add(6, "hours")
-        .format("hh:mmA") + item.staffMemberIds[0]
-    );
-  });
+  // slotsArray.value.map((item) => {
+  //   console.log(
+  //     "item:",
+  //     moment(item.start.dateTime, "YYYY-MM-DDTHH:mm")
+  //       .add(6, "hours")
+  //       .format("hh:mmA") + item.staffMemberIds[0]
+  //   );
+  // });
 
   const locale = "en";
   const hours = [];
@@ -135,10 +143,11 @@ Booking.getInitialProps = async (ctx) => {
   const startDate = ctx.query.startDate + ":00Z";
   const endDate = ctx.query.endDate + ":00Z";
   const email = ctx.query.email;
+  const accessToken = ctx.query.access_token;
 
   const config = {
     headers: {
-      Authorization: `Bearer ${process.env.NEXT_PUBLIC_ACCES_TOKEN}`,
+      Authorization: `Bearer ${accessToken}`,
       "Content-Type": "application/json",
     },
   };
@@ -157,6 +166,7 @@ Booking.getInitialProps = async (ctx) => {
     startDate: startDate,
     endDate: endDate,
     staffMembersArray: staffMembersArray,
+    accessToken: accessToken,
   };
 };
 function submitContact(
@@ -165,7 +175,8 @@ function submitContact(
   email,
   name,
   selectedOption,
-  selectedStaff
+  selectedStaff,
+  accessToken
 ) {
   startDate = moment(
     moment(startDate, "YYYY-MM-DDTHH:mm:ss:00.0000000+00:00").format(
@@ -180,6 +191,7 @@ function submitContact(
     endDate,
     email,
     name,
-    selectedStaff
+    selectedStaff,
+    accessToken
   );
 }
