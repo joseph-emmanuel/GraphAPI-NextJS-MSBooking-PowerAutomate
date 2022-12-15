@@ -1,0 +1,10 @@
+POST https://login.microsoftonline.com/{7bc94ed8-159e-42e6-9dc2-1c67252d2ac7}/oauth2/token
+Content-Type: application/x-www-form-urlencoded
+
+grant_type=client_credentials
+
+&client_id={5d4d12cd-112d-4e5a-87e9-52c75e3219aa}
+&client_secret={RMP8Q~U83X-wLxQmNhdkO2dNydLWcnH1n8RJIbdA}
+
+### Extract access token from getAADToken request
+# @token = {{getAADToken.response.body.access_token}}
